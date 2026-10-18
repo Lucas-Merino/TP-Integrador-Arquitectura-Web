@@ -1,0 +1,14 @@
+{
+  "name": "jardin",
+  "version": "0.1.0",
+  "private": true,
+  "description": "TPI Arquitectura Web: jardin de plantas",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {},
+  "devDependencies": {
+    "concurrently": "^10.0.6"
+  }
+}
