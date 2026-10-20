@@ -1,6 +1,7 @@
 import express from 'express'
 import { manejarErrores } from './middlewares/manejarErrores.js'
 import { rutaNoEncontrada } from './middlewares/rutaNoEncontrada.js'
+import rutasEspecies from './rutas/especies.js'
 
 const app = express()
 
@@ -11,6 +12,8 @@ app.use(express.json())
 app.get('/api/v1/salud', (req, res) => {
   res.json({ ok: true })
 })
+
+app.use('/api/v1/especies', rutasEspecies)
 
 // estos dos van siempre al final, despues de todas las rutas
 app.use(rutaNoEncontrada)

@@ -1,0 +1,62 @@
+@base = http://localhost:3000/api/v1
+
+### especies
+GET {{base}}/especies
+
+### solo las de luz alta
+GET {{base}}/especies?luz=alta
+
+### crear
+# @name potus
+POST {{base}}/especies
+Content-Type: application/json
+
+{
+  "nombreComun": "Potus",
+  "nombreCientifico": "Epipremnum aureum",
+  "luz": "media",
+  "frecuenciaRiegoDias": 7,
+  "frecuenciaAbonoDias": 30
+}
+
+### ver la que cree recien
+GET {{base}}/especies/{{potus.response.body.id}}
+
+### id que no existe, tiene que dar 404
+GET {{base}}/especies/123
+
+### a ver si tira 422 con luz rara
+POST {{base}}/especies
+Content-Type: application/json
+
+{
+  "nombreComun": "Helecho",
+  "luz": "muchisima",
+  "frecuenciaRiegoDias": 3,
+  "frecuenciaAbonoDias": 20
+}
+
+### riego en 0 tambien deberia ser 422
+POST {{base}}/especies
+Content-Type: application/json
+
+{
+  "nombreComun": "Cactus",
+  "luz": "alta",
+  "frecuenciaRiegoDias": 0,
+  "frecuenciaAbonoDias": 60
+}
+
+### editar el potus
+PUT {{base}}/especies/{{potus.response.body.id}}
+Content-Type: application/json
+
+{
+  "nombreComun": "Potus dorado",
+  "luz": "baja",
+  "frecuenciaRiegoDias": 10,
+  "frecuenciaAbonoDias": 45
+}
+
+### borrar (204), si lo corro de nuevo da 404
+DELETE {{base}}/especies/{{potus.response.body.id}}
