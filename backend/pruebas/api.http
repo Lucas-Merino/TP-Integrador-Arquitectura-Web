@@ -60,3 +60,39 @@ Content-Type: application/json
 
 ### borrar (204), si lo corro de nuevo da 404
 DELETE {{base}}/especies/{{potus.response.body.id}}
+
+### zonas (ya vienen del seed)
+GET {{base}}/zonas
+
+### solo las de afuera
+GET {{base}}/zonas?interior=false
+
+### crear
+# @name terraza
+POST {{base}}/zonas
+Content-Type: application/json
+
+{
+  "nombre": "Terraza",
+  "luz": "alta",
+  "interior": false
+}
+
+### interior como texto, tiene que dar 422
+POST {{base}}/zonas
+Content-Type: application/json
+
+{
+  "nombre": "Pasillo",
+  "luz": "baja",
+  "interior": "si"
+}
+
+### plantas de la terraza (vacio)
+GET {{base}}/zonas/{{terraza.response.body.id}}/plantas
+
+### zona que no existe, 404
+GET {{base}}/zonas/123/plantas
+
+### borrar la terraza
+DELETE {{base}}/zonas/{{terraza.response.body.id}}
