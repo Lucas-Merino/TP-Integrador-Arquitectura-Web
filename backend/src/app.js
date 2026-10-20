@@ -1,4 +1,6 @@
 import express from 'express'
+import { manejarErrores } from './middlewares/manejarErrores.js'
+import { rutaNoEncontrada } from './middlewares/rutaNoEncontrada.js'
 
 const app = express()
 
@@ -9,5 +11,9 @@ app.use(express.json())
 app.get('/api/v1/salud', (req, res) => {
   res.json({ ok: true })
 })
+
+// estos dos van siempre al final, despues de todas las rutas
+app.use(rutaNoEncontrada)
+app.use(manejarErrores)
 
 export default app
