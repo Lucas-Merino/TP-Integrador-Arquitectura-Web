@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto'
-import { especies } from '../datos/almacen.js'
+import { especies, plantas } from '../datos/almacen.js'
 import { ErrorHttp } from '../middlewares/manejarErrores.js'
 
 export function listar(filtros = {}) {
@@ -34,7 +34,11 @@ export function reemplazar(id, datos) {
 
 export function eliminar(id) {
   obtener(id)
-  // TODO paso 5: devolver 409 si hay plantas de esta especie
+  // no se borra si quedarian plantas apuntando a algo que no existe
+  const enUso = [...plantas.values()].some((p) => p.especieId === id)
+  if (enUso) {
+    throw new ErrorHttp(409, 'No se puede borrar: hay plantas de esta especie')
+  }
   especies.delete(id)
 }
 

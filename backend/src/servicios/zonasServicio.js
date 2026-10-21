@@ -35,7 +35,11 @@ export function reemplazar(id, datos) {
 
 export function eliminar(id) {
   obtener(id)
-  // TODO paso 5: devolver 409 si hay plantas en esta zona
+  // no se borra si quedarian plantas apuntando a algo que no existe
+  const enUso = [...plantas.values()].some((p) => p.zonaId === id)
+  if (enUso) {
+    throw new ErrorHttp(409, 'No se puede borrar: hay plantas en esta zona')
+  }
   zonas.delete(id)
 }
 
