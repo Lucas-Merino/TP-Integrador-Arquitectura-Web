@@ -4,7 +4,6 @@ import { rutaNoEncontrada } from './middlewares/rutaNoEncontrada.js'
 import rutasEspecies from './rutas/especies.js'
 import rutasZonas from './rutas/zonas.js'
 import rutasPlantas from './rutas/plantas.js'
-import rutasEtiquetas from './rutas/etiquetas.js'
 
 const app = express()
 
@@ -19,7 +18,6 @@ app.get('/api/v1/salud', (req, res) => {
 app.use('/api/v1/especies', rutasEspecies)
 app.use('/api/v1/zonas', rutasZonas)
 app.use('/api/v1/plantas', rutasPlantas)
-app.use('/api/v1/etiquetas', rutasEtiquetas)
 
 // estos dos van siempre al final, despues de todas las rutas
 app.use(rutaNoEncontrada)

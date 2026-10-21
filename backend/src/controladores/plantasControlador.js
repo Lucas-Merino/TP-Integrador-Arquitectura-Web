@@ -24,10 +24,6 @@ export function cambiarEstado(req, res) {
   res.json(servicio.cambiarEstado(req.params.id, req.body.estado))
 }
 
-export function reemplazarEtiquetas(req, res) {
-  res.json(servicio.reemplazarEtiquetas(req.params.id, req.body.etiquetas))
-}
-
 export function eliminar(req, res) {
   servicio.eliminar(req.params.id)
   res.status(204).end()

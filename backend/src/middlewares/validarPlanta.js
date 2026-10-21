@@ -51,26 +51,3 @@ export function validarEstado(req, res, next) {
 
   next()
 }
-
-// PUT /plantas/:id/etiquetas recibe la lista completa de ids
-export function validarListaEtiquetas(req, res, next) {
-  const datos = req.body
-  revisarObjeto(datos)
-
-  if (!Array.isArray(datos.etiquetas) || !datos.etiquetas.every(esTexto)) {
-    throw new ErrorHttp(422, 'El campo etiquetas tiene que ser una lista de ids')
-  }
-
-  next()
-}
-
-export function validarEtiqueta(req, res, next) {
-  const datos = req.body
-  revisarObjeto(datos)
-
-  if (!esTexto(datos.nombre)) {
-    throw new ErrorHttp(422, 'El campo nombre es obligatorio y tiene que ser texto')
-  }
-
-  next()
-}

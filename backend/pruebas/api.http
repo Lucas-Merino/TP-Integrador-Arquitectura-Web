@@ -88,11 +88,8 @@ Content-Type: application/json
   "interior": "si"
 }
 
-### plantas de la terraza (vacio)
-GET {{base}}/zonas/{{terraza.response.body.id}}/plantas
-
 ### zona que no existe, 404
-GET {{base}}/zonas/123/plantas
+GET {{base}}/zonas/123
 
 ### borrar la terraza
 DELETE {{base}}/zonas/{{terraza.response.body.id}}
@@ -157,32 +154,12 @@ Content-Type: application/json
 ### borrar una especie con plantas, 409
 DELETE {{base}}/especies/{{especies.response.body.0.id}}
 
-### etiquetas
-# @name etiquetas
-GET {{base}}/etiquetas
-
-### repetida (con mayuscula igual cuenta), 409
-POST {{base}}/etiquetas
-Content-Type: application/json
-
-{
-  "nombre": "Suculentas"
-}
-
-### ponerle etiqueta, si lo mando dos veces queda igual
-PUT {{base}}/plantas/{{nueva.response.body.id}}/etiquetas
-Content-Type: application/json
-
-{
-  "etiquetas": ["{{etiquetas.response.body.0.id}}"]
-}
-
 ### borrar la planta (204), la segunda vez 404
 DELETE {{base}}/plantas/{{nueva.response.body.id}}
 
 ### --- cuidados ---
 
-### buscar a Rulo, el helecho que esta critico
+### buscar a Rulo, el helecho que tiene el riego atrasado
 # @name rulo
 GET {{base}}/plantas?limit=20&especieId={{especies.response.body.1.id}}
 
@@ -202,7 +179,7 @@ Content-Type: application/json
   "nota": "estaba seca la tierra"
 }
 
-### ahora deberia estar en atencion (solo le falta el abono)
+### ahora deberia estar al dia
 GET {{base}}/plantas/{{rulo.response.body.datos.0.id}}
 
 ### un cuidado puntual

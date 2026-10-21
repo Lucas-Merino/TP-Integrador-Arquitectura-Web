@@ -21,7 +21,3 @@ export function eliminar(req, res) {
   servicio.eliminar(req.params.id)
   res.status(204).end()
 }
-
-export function listarPlantas(req, res) {
-  res.json(servicio.listarPlantas(req.params.id))
-}

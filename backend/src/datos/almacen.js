@@ -3,7 +3,6 @@ export const especies = new Map()
 export const zonas = new Map()
 export const plantas = new Map()
 export const cuidados = new Map()
-export const etiquetas = new Map()
 
 // deja todo vacio, lo usan las pruebas para arrancar de cero
 export function reiniciar() {
@@ -11,5 +10,4 @@ export function reiniciar() {
   zonas.clear()
   plantas.clear()
   cuidados.clear()
-  etiquetas.clear()
 }

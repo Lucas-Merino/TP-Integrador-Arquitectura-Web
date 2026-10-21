@@ -43,12 +43,6 @@ export function eliminar(id) {
   zonas.delete(id)
 }
 
-// plantas que estan en la zona, primero se fija que la zona exista
-export function listarPlantas(id) {
-  obtener(id)
-  return [...plantas.values()].filter((p) => p.zonaId === id)
-}
-
 function armarZona(datos) {
   return {
     nombre: datos.nombre.trim(),

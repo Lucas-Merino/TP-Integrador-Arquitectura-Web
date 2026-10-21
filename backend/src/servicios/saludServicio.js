@@ -7,38 +7,27 @@ function diasDesde(fecha) {
   return Math.floor((hoy - new Date(fecha)) / UN_DIA)
 }
 
-// fecha del ultimo cuidado de ese tipo, o null si nunca se hizo
-function ultimaFecha(plantaId, tipo) {
+// fecha del ultimo riego, o null si nunca se rego
+function ultimoRiego(plantaId) {
   let ultima = null
   for (const c of cuidados.values()) {
-    if (c.plantaId === plantaId && c.tipo === tipo && (!ultima || c.fecha > ultima)) {
+    if (c.plantaId === plantaId && c.tipo === 'riego' && (!ultima || c.fecha > ultima)) {
       ultima = c.fecha
     }
   }
   return ultima
 }
 
-// la salud no se guarda: depende de la fecha de hoy, asi que se calcula cada vez que se pide
+// la salud no se guarda: depende de la fecha de hoy, asi que se calcula cada vez que se pide.
+// solo mira el riego, comparando los dias sin regar contra la frecuencia de la especie
 export function calcularSalud(planta) {
   // a una planta muerta o regalada ya no se la cuida
   if (planta.estado === 'muerta' || planta.estado === 'regalada') return null
 
   const especie = especies.get(planta.especieId)
-  const frecuencias = { riego: especie.frecuenciaRiegoDias, abono: especie.frecuenciaAbonoDias }
-  const atrasados = []
+  // si nunca se rego se cuenta desde la compra
+  const diasSinRiego = diasDesde(ultimoRiego(planta.id) ?? planta.fechaCompra)
+  const diasAtraso = Math.max(0, diasSinRiego - especie.frecuenciaRiegoDias)
 
-  for (const [tipo, cadaCuantosDias] of Object.entries(frecuencias)) {
-    // si nunca se hizo se cuenta desde la compra
-    const desde = ultimaFecha(planta.id, tipo) ?? planta.fechaCompra
-    const dias = diasDesde(desde)
-    if (dias > cadaCuantosDias) {
-      atrasados.push({ tipo, diasAtraso: dias - cadaCuantosDias })
-    }
-  }
-
-  let estado = 'sana'
-  if (atrasados.length === 1) estado = 'atencion'
-  if (atrasados.length === 2) estado = 'critica'
-
-  return { estado, atrasados }
+  return { estado: diasAtraso > 0 ? 'atrasada' : 'al_dia', diasSinRiego, diasAtraso }
 }

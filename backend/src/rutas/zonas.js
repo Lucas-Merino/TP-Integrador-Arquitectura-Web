@@ -6,7 +6,6 @@ const router = Router()
 
 router.get('/', controlador.listar)
 router.get('/:id', controlador.obtener)
-router.get('/:id/plantas', controlador.listarPlantas)
 router.post('/', validarZona, controlador.crear)
 router.put('/:id', validarZona, controlador.reemplazar)
 router.delete('/:id', controlador.eliminar)

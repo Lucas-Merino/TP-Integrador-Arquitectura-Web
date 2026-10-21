@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto'
-import { especies, zonas, plantas, cuidados, etiquetas, reiniciar } from './almacen.js'
+import { especies, zonas, plantas, cuidados, reiniciar } from './almacen.js'
 
 // fecha de hace n dias en formato AAAA-MM-DD, asi el seed siempre queda "al dia"
 function haceDias(n) {
@@ -31,33 +31,29 @@ export function cargarSeed() {
   const cocina = guardar(zonas, { nombre: 'Cocina', luz: 'media', interior: true })
   const patio = guardar(zonas, { nombre: 'Patio', luz: 'alta', interior: false })
 
-  const regalo = guardar(etiquetas, { nombre: 'regalo de mamá' })
-  const suculentas = guardar(etiquetas, { nombre: 'suculentas' })
-  const aromaticas = guardar(etiquetas, { nombre: 'aromáticas' })
-
   function planta(apodo, especie, zona, extra = {}) {
     return guardar(plantas, {
       apodo,
       especieId: especie.id,
       zonaId: zona.id,
       fechaCompra: extra.fechaCompra ?? haceDias(200),
-      estado: extra.estado ?? 'activa',
-      etiquetas: extra.etiquetas ?? []
+      estado: extra.estado ?? 'activa'
     })
   }
 
   // cada fila: planta, dias desde el ultimo riego, dias desde el ultimo abono
+  // (el comentario dice si el riego esta al dia segun la frecuencia de la especie)
   const plantasConCuidados = [
-    [planta('Pepe', potus, living, { etiquetas: [regalo.id] }), 3, 10], // sana
-    [planta('Rulo', helecho, banio), 6, 40], // critica: riego y abono atrasados
-    [planta('Pinchudo', cactus, balcon, { etiquetas: [suculentas.id] }), 10, 30], // sana
-    [planta('Mónica', monstera, living), 12, 15], // atencion: riego atrasado
-    [planta('Violeta', lavanda, patio, { etiquetas: [aromaticas.id] }), 2, 20], // sana
-    [planta('Sansa', sansevieria, banio), 5, 70], // atencion: abono atrasado
-    [planta('Albi', albahaca, cocina, { etiquetas: [aromaticas.id] }), 4, 25], // critica + alerta de luz
-    [planta('Lava', lavanda, living, { etiquetas: [aromaticas.id, regalo.id] }), 1, 10], // alerta de luz
-    [planta('Espina', cactus, cocina, { etiquetas: [suculentas.id] }), 25, 70], // critica + alerta de luz
-    [planta('Colgante', potus, cocina), 9, 35], // critica
+    [planta('Pepe', potus, living), 3, 10], // al dia
+    [planta('Rulo', helecho, banio), 6, 40], // atrasada
+    [planta('Pinchudo', cactus, balcon), 10, 30], // al dia
+    [planta('Mónica', monstera, living), 12, 15], // atrasada
+    [planta('Violeta', lavanda, patio), 2, 20], // al dia
+    [planta('Sansa', sansevieria, banio), 5, 70], // al dia
+    [planta('Albi', albahaca, cocina), 4, 25], // atrasada
+    [planta('Lava', lavanda, living), 1, 10], // al dia
+    [planta('Espina', cactus, cocina), 25, 70], // atrasada
+    [planta('Colgante', potus, cocina), 9, 35], // atrasada
     [planta('Helena', helecho, living, { estado: 'en_recuperacion' }), 1, 12],
     [planta('Tito', monstera, patio, { estado: 'regalada', fechaCompra: haceDias(400) }), 30, 60],
     [planta('Seca', albahaca, balcon, { estado: 'muerta', fechaCompra: haceDias(150) }), 50, 80]

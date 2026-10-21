@@ -1,15 +1,10 @@
 import { randomUUID } from 'node:crypto'
-import { plantas, especies, zonas, etiquetas, cuidados } from '../datos/almacen.js'
+import { plantas, especies, zonas, cuidados } from '../datos/almacen.js'
 import { ErrorHttp } from '../middlewares/manejarErrores.js'
 import { paginar } from '../utils/paginar.js'
 
-// a que estados se puede pasar desde cada uno; muerta y regalada son finales
-const TRANSICIONES = {
-  activa: ['en_recuperacion', 'muerta', 'regalada'],
-  en_recuperacion: ['activa', 'muerta'],
-  muerta: [],
-  regalada: []
-}
+// una planta muerta o regalada ya no vuelve a cambiar
+const ESTADOS_FINALES = ['muerta', 'regalada']
 
 export function listar(query = {}) {
   let lista = [...plantas.values()]
@@ -17,8 +12,6 @@ export function listar(query = {}) {
   if (query.zonaId) lista = lista.filter((p) => p.zonaId === query.zonaId)
   if (query.especieId) lista = lista.filter((p) => p.especieId === query.especieId)
   if (query.estado) lista = lista.filter((p) => p.estado === query.estado)
-  // la etiqueta se filtra por id, igual que zona y especie
-  if (query.etiqueta) lista = lista.filter((p) => p.etiquetas.includes(query.etiqueta))
 
   return paginar(lista, query)
 }
@@ -31,48 +24,32 @@ export function obtener(id) {
   return planta
 }
 
-// una planta nueva siempre arranca activa y sin etiquetas
+// una planta nueva siempre arranca activa
 export function crear(datos) {
-  const planta = { id: randomUUID(), ...armarPlanta(datos), estado: 'activa', etiquetas: [] }
+  const planta = { id: randomUUID(), ...armarPlanta(datos), estado: 'activa' }
   plantas.set(planta.id, planta)
   return planta
 }
 
-// PUT reemplaza los datos editables; el estado y las etiquetas tienen su propio endpoint
+// PUT reemplaza los datos editables; el estado se cambia con PATCH
 export function reemplazar(id, datos) {
   const actual = obtener(id)
-  const planta = { id, ...armarPlanta(datos), estado: actual.estado, etiquetas: actual.etiquetas }
+  const planta = { id, ...armarPlanta(datos), estado: actual.estado }
   plantas.set(id, planta)
   return planta
 }
 
 export function cambiarEstado(id, nuevoEstado) {
-  // primero el 404: si la planta no existe no tiene sentido mirar la transicion
+  // primero el 404: si la planta no existe no tiene sentido mirar el estado
   const planta = obtener(id)
 
   if (planta.estado === nuevoEstado) return planta
 
-  if (!TRANSICIONES[planta.estado].includes(nuevoEstado)) {
-    if (TRANSICIONES[planta.estado].length === 0) {
-      throw new ErrorHttp(409, `Una planta ${planta.estado} no puede cambiar de estado`)
-    }
-    throw new ErrorHttp(409, `No se puede pasar de ${planta.estado} a ${nuevoEstado}`)
+  if (ESTADOS_FINALES.includes(planta.estado)) {
+    throw new ErrorHttp(409, `Una planta ${planta.estado} no puede cambiar de estado`)
   }
 
   planta.estado = nuevoEstado
-  return planta
-}
-
-// reemplaza la lista entera: mandar la misma lista dos veces deja todo igual
-export function reemplazarEtiquetas(id, ids) {
-  const planta = obtener(id)
-  for (const idEtiqueta of ids) {
-    if (!etiquetas.has(idEtiqueta)) {
-      throw new ErrorHttp(422, `No existe la etiqueta ${idEtiqueta}`)
-    }
-  }
-  // el Set saca repetidos por si mandan el mismo id dos veces
-  planta.etiquetas = [...new Set(ids)]
   return planta
 }
 
