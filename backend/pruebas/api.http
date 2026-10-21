@@ -207,3 +207,16 @@ GET {{base}}/plantas/no-existe/cuidados
 
 ### borrar el riego (204), la segunda vez 404
 DELETE {{base}}/plantas/{{rulo.response.body.datos.0.id}}/cuidados/{{riego.response.body.id}}
+
+### --- reportes ---
+### plantas con el riego atrasado, por zona
+GET {{base}}/reportes/riegos-pendientes
+
+### cuidados de los ultimos 3 meses
+GET {{base}}/reportes/cuidados-por-mes?meses=3
+
+### sin meses trae 6
+GET {{base}}/reportes/cuidados-por-mes
+
+### meses mal, 400
+GET {{base}}/reportes/cuidados-por-mes?meses=cien
