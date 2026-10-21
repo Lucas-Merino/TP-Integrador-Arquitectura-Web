@@ -13,7 +13,7 @@ function esTexto(valor) {
 }
 
 // fecha AAAA-MM-DD que ademas sea real (no 2024-02-31)
-function esFecha(valor) {
+export function esFecha(valor) {
   if (typeof valor !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(valor)) return false
   const fecha = new Date(valor)
   return !isNaN(fecha) && fecha.toISOString().slice(0, 10) === valor
