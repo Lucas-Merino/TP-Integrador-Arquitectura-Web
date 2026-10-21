@@ -1,11 +1,14 @@
 import * as servicio from '../servicios/plantasServicio.js'
+import { calcularSalud } from '../servicios/saludServicio.js'
 
 export function listar(req, res) {
   res.json(servicio.listar(req.query))
 }
 
+// en el detalle se agrega la salud, que se calcula en el momento
 export function obtener(req, res) {
-  res.json(servicio.obtener(req.params.id))
+  const planta = servicio.obtener(req.params.id)
+  res.json({ ...planta, salud: calcularSalud(planta) })
 }
 
 export function crear(req, res) {
