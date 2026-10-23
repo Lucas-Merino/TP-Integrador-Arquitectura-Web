@@ -1,0 +1,150 @@
+/* variables para no repetir colores y medidas por todos lados */
+:root {
+  --verde: #2f6b3c;
+  --verde-claro: #e6f0e3;
+  --tierra: #8a5a3b;
+  --texto: #222;
+  --texto-suave: #5f5f5f;
+  --fondo: #faf8f3;
+  --borde: #d9d4c7;
+  --error: #b3261e;
+
+  --espacio-1: 0.25rem;
+  --espacio-2: 0.5rem;
+  --espacio-3: 1rem;
+  --espacio-4: 1.5rem;
+  --espacio-5: 2.5rem;
+
+  --radio: 6px;
+  --ancho-max: 960px;
+
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+  color: var(--texto);
+  background-color: var(--fondo);
+}
+
+/* el ancho incluye padding y borde, asi las cuentas son mas faciles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* que el footer quede abajo aunque haya poco contenido */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.2;
+  margin: 0 0 var(--espacio-3);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+/* ---- mobile first: primero el celular, despues se agranda ---- */
+
+.encabezado {
+  background-color: var(--verde);
+  color: white;
+  padding: var(--espacio-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.encabezado-titulo {
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: var(--espacio-2);
+}
+
+.menu-boton {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--radio);
+  color: white;
+  padding: var(--espacio-1) var(--espacio-3);
+  cursor: pointer;
+}
+
+.menu-boton:hover,
+.menu-boton:focus-visible {
+  border-color: white;
+}
+
+.menu-boton.activo {
+  background-color: white;
+  color: var(--verde);
+}
+
+.contenido {
+  flex: 1;
+  width: 100%;
+  max-width: var(--ancho-max);
+  margin: 0 auto;
+  padding: var(--espacio-4) var(--espacio-3);
+}
+
+.aviso {
+  background-color: var(--verde-claro);
+  border-left: 4px solid var(--verde);
+  padding: var(--espacio-2) var(--espacio-3);
+  border-radius: var(--radio);
+}
+
+.error {
+  color: var(--error);
+}
+
+.pie {
+  border-top: 1px solid var(--borde);
+  color: var(--texto-suave);
+  font-size: 0.875rem;
+  text-align: center;
+  padding: var(--espacio-3);
+}
+
+.pie p {
+  margin: 0;
+}
+
+/* tablet y compu: el titulo y el menu en la misma fila */
+@media (min-width: 640px) {
+  .encabezado {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--espacio-3) var(--espacio-5);
+  }
+
+  .encabezado-titulo {
+    font-size: 1.75rem;
+  }
+
+  .contenido {
+    padding: var(--espacio-5) var(--espacio-4);
+  }
+}

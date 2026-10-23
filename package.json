@@ -8,6 +8,7 @@
     "frontend"
   ],
   "scripts": {
+    "dev": "concurrently -n api,web -c green,cyan \"npm run dev --workspace backend\" \"npm run dev --workspace frontend\"",
     "dev:backend": "npm run dev --workspace backend",
     "test": "npm test --workspace backend"
   },
