@@ -131,6 +131,142 @@ textarea {
   margin: 0;
 }
 
+/* ---- listado de plantas ---- */
+
+.filtros {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  margin-bottom: var(--espacio-4);
+}
+
+.filtros label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.875rem;
+  color: var(--texto-suave);
+}
+
+.filtros select {
+  padding: var(--espacio-1) var(--espacio-2);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background-color: white;
+}
+
+.boton-secundario,
+.paginacion button {
+  background-color: white;
+  border: 1px solid var(--verde);
+  border-radius: var(--radio);
+  color: var(--verde);
+  padding: var(--espacio-1) var(--espacio-3);
+  cursor: pointer;
+}
+
+.boton-secundario:hover,
+.paginacion button:hover:not(:disabled) {
+  background-color: var(--verde-claro);
+}
+
+.paginacion button:disabled {
+  border-color: var(--borde);
+  color: var(--texto-suave);
+  cursor: not-allowed;
+}
+
+.cantidad {
+  color: var(--texto-suave);
+  font-size: 0.875rem;
+}
+
+/* auto-fill: entran tantas columnas como quepan, sin media queries */
+.grilla-plantas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--espacio-3);
+}
+
+.tarjeta {
+  height: 100%;
+  background-color: white;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: var(--espacio-3);
+}
+
+.tarjeta-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--espacio-2);
+}
+
+.tarjeta-cabecera h3 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.estado {
+  font-size: 0.75rem;
+  padding: 0 var(--espacio-2);
+  border-radius: 999px;
+  background-color: var(--verde-claro);
+  color: var(--verde);
+  white-space: nowrap;
+}
+
+.estado-en_recuperacion {
+  background-color: #fdf0d5;
+  color: var(--tierra);
+}
+
+.estado-muerta,
+.estado-regalada {
+  background-color: #eee;
+  color: var(--texto-suave);
+}
+
+.tarjeta-datos {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 var(--espacio-2);
+  margin: var(--espacio-2) 0;
+}
+
+.tarjeta-datos dt {
+  color: var(--texto-suave);
+}
+
+.tarjeta-datos dd {
+  margin: 0;
+}
+
+.salud {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.salud.al-dia {
+  color: var(--verde);
+}
+
+.salud.atrasada {
+  color: var(--error);
+}
+
+.paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--espacio-3);
+  margin-top: var(--espacio-4);
+}
+
 /* tablet y compu: el titulo y el menu en la misma fila */
 @media (min-width: 640px) {
   .encabezado {
@@ -146,5 +282,11 @@ textarea {
 
   .contenido {
     padding: var(--espacio-5) var(--espacio-4);
+  }
+
+  .filtros {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
   }
 }

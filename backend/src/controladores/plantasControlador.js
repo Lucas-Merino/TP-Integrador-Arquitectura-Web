@@ -1,8 +1,11 @@
 import * as servicio from '../servicios/plantasServicio.js'
 import { calcularSalud } from '../servicios/saludServicio.js'
 
+// la salud tambien va en el listado, la tarjeta de cada planta la muestra
 export function listar(req, res) {
-  res.json(servicio.listar(req.query))
+  const resultado = servicio.listar(req.query)
+  const datos = resultado.datos.map((p) => ({ ...p, salud: calcularSalud(p) }))
+  res.json({ ...resultado, datos })
 }
 
 // en el detalle se agrega la salud, que se calcula en el momento

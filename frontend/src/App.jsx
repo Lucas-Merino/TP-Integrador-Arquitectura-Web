@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Encabezado from './componentes/Encabezado.jsx'
+import Plantas from './paginas/Plantas.jsx'
 
 // por ahora no hay router: con un estado alcanza para dos pantallas
 function App() {
@@ -10,12 +11,7 @@ function App() {
       <Encabezado seccion={seccion} onCambiar={setSeccion} />
 
       <main className="contenido">
-        {seccion === 'plantas' && (
-          <section>
-            <h2>Mis plantas</h2>
-            <p className="aviso">Acá va a ir el listado de plantas (paso 10).</p>
-          </section>
-        )}
+        {seccion === 'plantas' && <Plantas />}
 
         {seccion === 'reportes' && (
           <section>
