@@ -5,6 +5,7 @@ import TarjetaPlanta from '../componentes/TarjetaPlanta.jsx'
 import Filtros from '../componentes/Filtros.jsx'
 import Paginacion from '../componentes/Paginacion.jsx'
 import FormularioPlanta from '../componentes/FormularioPlanta.jsx'
+import DetallePlanta from '../componentes/DetallePlanta.jsx'
 
 const POR_PAGINA = 6
 const SIN_FILTROS = { zonaId: '', especieId: '', estado: '' }
@@ -20,6 +21,8 @@ function Plantas() {
   // null: no hay formulario abierto; 'nueva': alta; una planta: edicion
   const [enFormulario, setEnFormulario] = useState(null)
   const [mensaje, setMensaje] = useState(null)
+  // id de la planta que se esta viendo en detalle, o null para ver el listado
+  const [enDetalle, setEnDetalle] = useState(null)
   // se suma uno despues de guardar o borrar para que el listado se vuelva a pedir
   const [version, setVersion] = useState(0)
 
@@ -113,6 +116,24 @@ function Plantas() {
   const nombreEspecie = (id) => especies.find((e) => e.id === id)?.nombreComun ?? '...'
   const nombreZona = (id) => zonas.find((z) => z.id === id)?.nombre ?? '...'
 
+  // al volver del detalle se recarga el listado: el estado o la salud pueden haber cambiado
+  function volverDelDetalle() {
+    setEnDetalle(null)
+    recargar(null)
+  }
+
+  if (enDetalle) {
+    const planta = resultado.datos.find((p) => p.id === enDetalle)
+    return (
+      <DetallePlanta
+        id={enDetalle}
+        especie={nombreEspecie(planta?.especieId)}
+        zona={nombreZona(planta?.zonaId)}
+        onVolver={volverDelDetalle}
+      />
+    )
+  }
+
   return (
     <section>
       <div className="titulo-con-accion">
@@ -167,6 +188,7 @@ function Plantas() {
                   planta={planta}
                   especie={nombreEspecie(planta.especieId)}
                   zona={nombreZona(planta.zonaId)}
+                  onVer={() => setEnDetalle(planta.id)}
                   onEditar={() => abrirFormulario(planta)}
                   onEliminar={() => borrar(planta)}
                 />

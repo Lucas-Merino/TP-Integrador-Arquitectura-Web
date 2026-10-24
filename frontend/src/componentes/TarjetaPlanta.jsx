@@ -21,7 +21,7 @@ function Salud({ salud }) {
   return <p className="salud al-dia">💧 Riego al día</p>
 }
 
-function TarjetaPlanta({ planta, especie, zona, onEditar, onEliminar }) {
+function TarjetaPlanta({ planta, especie, zona, onVer, onEditar, onEliminar }) {
   // la confirmacion de la baja se hace en la misma tarjeta, sin window.confirm
   const [confirmando, setConfirmando] = useState(false)
 
@@ -51,6 +51,9 @@ function TarjetaPlanta({ planta, especie, zona, onEditar, onEliminar }) {
         </div>
       ) : (
         <div className="tarjeta-acciones">
+          <button type="button" className="boton-secundario" onClick={onVer}>
+            Ver detalle
+          </button>
           <button type="button" className="boton-secundario" onClick={onEditar}>
             Editar
           </button>
