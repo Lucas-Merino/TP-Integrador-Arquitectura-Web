@@ -93,7 +93,7 @@ Reglas: `apodo` obligatorio; `especieId` y `zonaId` tienen que existir (si no, 4
 
 El `estado` puede ser `activa`, `en_recuperacion`, `muerta` o `regalada`. Una planta nueva arranca `activa` y el estado solo se cambia con PATCH. Una planta `muerta` o `regalada` ya no cambia de estado (409).
 
-El detalle (`GET /plantas/:id`) agrega `salud`, que se calcula en el momento mirando el último riego contra la frecuencia de la especie:
+El listado y el detalle agregan `salud` a cada planta, que se calcula en el momento mirando el último riego contra la frecuencia de la especie:
 
 ```json
 "salud": { "estado": "atrasada", "diasSinRiego": 6, "diasAtraso": 3 }
