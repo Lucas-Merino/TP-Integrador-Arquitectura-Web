@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { listarPlantas } from '../api/plantas.js'
+import { listarPlantas, crearPlanta, editarPlanta, eliminarPlanta } from '../api/plantas.js'
 import { listarEspecies, listarZonas } from '../api/catalogos.js'
 import TarjetaPlanta from '../componentes/TarjetaPlanta.jsx'
 import Filtros from '../componentes/Filtros.jsx'
 import Paginacion from '../componentes/Paginacion.jsx'
+import FormularioPlanta from '../componentes/FormularioPlanta.jsx'
 
 const POR_PAGINA = 6
 const SIN_FILTROS = { zonaId: '', especieId: '', estado: '' }
@@ -16,6 +17,11 @@ function Plantas() {
   const [error, setError] = useState(null)
   const [especies, setEspecies] = useState([])
   const [zonas, setZonas] = useState([])
+  // null: no hay formulario abierto; 'nueva': alta; una planta: edicion
+  const [enFormulario, setEnFormulario] = useState(null)
+  const [mensaje, setMensaje] = useState(null)
+  // se suma uno despues de guardar o borrar para que el listado se vuelva a pedir
+  const [version, setVersion] = useState(0)
 
   // especies y zonas se piden una sola vez: sirven para los select y para mostrar nombres
   useEffect(() => {
@@ -48,7 +54,7 @@ function Plantas() {
     return () => {
       vigente = false
     }
-  }, [filtros, pagina])
+  }, [filtros, pagina, version])
 
   // al filtrar se vuelve a la primera pagina, si no podes quedar en una que ya no existe
   // el aviso de carga se prende aca, en el evento, y no adentro del efecto
@@ -69,12 +75,68 @@ function Plantas() {
     setPagina(numero)
   }
 
+  function recargar(texto) {
+    setMensaje(texto)
+    setCargando(true)
+    setVersion((v) => v + 1)
+  }
+
+  function abrirFormulario(planta) {
+    setMensaje(null)
+    setEnFormulario(planta)
+  }
+
+  // si falla, el error sube al formulario y lo muestra ahi
+  async function guardar(datos) {
+    if (enFormulario === 'nueva') {
+      const creada = await crearPlanta(datos)
+      recargar(`Se agregó "${creada.apodo}".`)
+    } else {
+      const editada = await editarPlanta(enFormulario.id, datos)
+      recargar(`Se guardaron los cambios de "${editada.apodo}".`)
+    }
+    setEnFormulario(null)
+  }
+
+  async function borrar(planta) {
+    try {
+      await eliminarPlanta(planta.id)
+      // si era la ultima de la pagina, se vuelve a la anterior
+      if (resultado.datos.length === 1 && pagina > 1) setPagina(pagina - 1)
+      recargar(`Se eliminó "${planta.apodo}".`)
+    } catch (err) {
+      setMensaje(null)
+      setError(err.message)
+    }
+  }
+
   const nombreEspecie = (id) => especies.find((e) => e.id === id)?.nombreComun ?? '...'
   const nombreZona = (id) => zonas.find((z) => z.id === id)?.nombre ?? '...'
 
   return (
     <section>
-      <h2>Mis plantas</h2>
+      <div className="titulo-con-accion">
+        <h2>Mis plantas</h2>
+        {!enFormulario && (
+          <button type="button" className="boton-principal" onClick={() => abrirFormulario('nueva')}>
+            + Nueva planta
+          </button>
+        )}
+      </div>
+
+      {enFormulario && (
+        <FormularioPlanta
+          // la key hace que el formulario arranque de cero al cambiar de planta
+          key={enFormulario === 'nueva' ? 'nueva' : enFormulario.id}
+          planta={enFormulario === 'nueva' ? null : enFormulario}
+          especies={especies}
+          zonas={zonas}
+          onGuardar={guardar}
+          onCancelar={() => setEnFormulario(null)}
+        />
+      )}
+
+      {mensaje && <p className="aviso" role="status">{mensaje}</p>}
 
       <Filtros
         filtros={filtros}
@@ -84,7 +146,7 @@ function Plantas() {
         onLimpiar={limpiarFiltros}
       />
 
-      {error && <p className="error" role="alert">No se pudo cargar el listado: {error}</p>}
+      {error && <p className="error" role="alert">Algo salió mal: {error}</p>}
 
       {cargando && !resultado && <p className="aviso">Cargando plantas...</p>}
 
@@ -105,6 +167,8 @@ function Plantas() {
                   planta={planta}
                   especie={nombreEspecie(planta.especieId)}
                   zona={nombreZona(planta.zonaId)}
+                  onEditar={() => abrirFormulario(planta)}
+                  onEliminar={() => borrar(planta)}
                 />
               </li>
             ))}
