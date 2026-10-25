@@ -1,0 +1,150 @@
+/* ---- reportes ---- */
+
+.reporte {
+  margin-bottom: var(--espacio-5);
+}
+
+.reporte-encabezado {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--espacio-2);
+  margin-bottom: var(--espacio-3);
+}
+
+.reporte-encabezado h3 {
+  margin: 0;
+}
+
+.reporte-encabezado label {
+  display: flex;
+  gap: var(--espacio-2);
+  align-items: center;
+  color: var(--texto-suave);
+}
+
+.reporte-encabezado select {
+  padding: var(--espacio-1) var(--espacio-2);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+}
+
+.texto-suave {
+  color: var(--texto-suave);
+}
+
+.zonas-pendientes {
+  display: grid;
+  gap: var(--espacio-3);
+}
+
+.zona-pendiente {
+  background-color: #fff;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: var(--espacio-3);
+}
+
+.zona-pendiente h4 {
+  margin: 0 0 var(--espacio-2);
+  color: var(--verde);
+}
+
+.zona-pendiente ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.zona-pendiente li {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--espacio-1) 0;
+  border-bottom: 1px dashed var(--borde);
+}
+
+.zona-pendiente li:last-child {
+  border-bottom: none;
+}
+
+.atraso {
+  color: var(--error);
+  font-weight: 600;
+}
+
+/* el svg se estira al ancho del contenedor y el viewBox mantiene la proporcion */
+.grafico {
+  display: block;
+  width: 100%;
+  height: auto;
+  background-color: #fff;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  margin-bottom: var(--espacio-3);
+}
+
+.grafico-barra {
+  fill: var(--verde);
+}
+
+.grafico-barra:hover {
+  fill: var(--tierra);
+}
+
+.grafico-guia {
+  stroke: var(--borde);
+  stroke-dasharray: 4 4;
+}
+
+.grafico-linea-base {
+  stroke: var(--texto-suave);
+}
+
+.grafico-eje {
+  fill: var(--texto-suave);
+  font-size: 12px;
+}
+
+.grafico-valor {
+  fill: var(--texto);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.tabla-scroll {
+  overflow-x: auto;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+}
+
+.tabla th,
+.tabla td {
+  padding: var(--espacio-2);
+  border-bottom: 1px solid var(--borde);
+  text-align: right;
+}
+
+.tabla th:first-child {
+  text-align: left;
+}
+
+.tabla thead th {
+  background-color: var(--verde-claro);
+}
+
+@media (min-width: 640px) {
+  .zonas-pendientes {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .zonas-pendientes {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
