@@ -367,6 +367,85 @@ textarea {
   font-size: 0.875rem;
 }
 
+/* detalle de una planta */
+.detalle-cabecera {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  margin-top: var(--espacio-3);
+}
+
+.detalle-bloque {
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background-color: white;
+  padding: var(--espacio-3);
+  margin: var(--espacio-3) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.detalle-bloque legend {
+  font-weight: 600;
+  padding: 0 var(--espacio-1);
+}
+
+.detalle-bloque input {
+  padding: var(--espacio-2);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+}
+
+.detalle-botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-2);
+}
+
+.ayuda {
+  color: var(--texto-suave);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.historial {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.historial li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-2);
+  padding: var(--espacio-2) 0;
+  border-bottom: 1px solid var(--borde);
+}
+
+.historial time {
+  color: var(--texto-suave);
+  font-variant-numeric: tabular-nums;
+}
+
+.historial-nota {
+  color: var(--texto-suave);
+  font-style: italic;
+}
+
+.boton-quitar {
+  margin-left: auto;
+  border: none;
+  background: none;
+  color: var(--texto-suave);
+  cursor: pointer;
+}
+
+.boton-quitar:hover {
+  color: var(--error);
+}
+
 /* tablet y compu: el titulo y el menu en la misma fila */
 @media (min-width: 640px) {
   .encabezado {
