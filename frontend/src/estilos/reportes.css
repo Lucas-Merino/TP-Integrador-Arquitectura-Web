@@ -44,6 +44,7 @@
   border: 1px solid var(--borde);
   border-radius: var(--radio);
   padding: var(--espacio-3);
+  box-shadow: var(--sombra);
 }
 
 .zona-pendiente h4 {
@@ -73,47 +74,53 @@
   font-weight: 600;
 }
 
-/* el svg se estira al ancho del contenedor y el viewBox mantiene la proporcion */
 .grafico {
-  display: block;
-  width: 100%;
-  height: auto;
+  margin: 0 0 var(--espacio-3);
+  padding: var(--espacio-3);
   background-color: #fff;
   border: 1px solid var(--borde);
   border-radius: var(--radio);
-  margin-bottom: var(--espacio-3);
+  box-shadow: var(--sombra);
+}
+
+.grafico figcaption {
+  color: var(--texto-suave);
+  margin-bottom: var(--espacio-2);
+}
+
+.grafico-barras {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--espacio-2);
+  height: 200px;
+}
+
+.grafico-columna {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .grafico-barra {
-  fill: var(--verde);
+  width: 60%;
+  background: linear-gradient(to top, #2f6b3c, #6fb07d);
+  border-radius: 6px 6px 0 0;
 }
 
-.grafico-barra:hover {
-  fill: var(--tierra);
-}
-
-.grafico-guia {
-  stroke: var(--borde);
-  stroke-dasharray: 4 4;
-}
-
-.grafico-linea-base {
-  stroke: var(--texto-suave);
-}
-
-.grafico-eje {
-  fill: var(--texto-suave);
+.grafico-valor,
+.grafico-etiqueta {
   font-size: 12px;
-}
-
-.grafico-valor {
-  fill: var(--texto);
-  font-size: 12px;
-  font-weight: 600;
+  color: var(--texto-suave);
 }
 
 .tabla-scroll {
   overflow-x: auto;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
 }
 
 .tabla {
@@ -124,7 +131,7 @@
 
 .tabla th,
 .tabla td {
-  padding: var(--espacio-2);
+  padding: var(--espacio-2) var(--espacio-3);
   border-bottom: 1px solid var(--borde);
   text-align: right;
 }
@@ -135,6 +142,15 @@
 
 .tabla thead th {
   background-color: var(--verde-claro);
+  color: var(--verde);
+}
+
+.tabla tbody tr:hover {
+  background-color: #f8faf6;
+}
+
+.tabla tbody tr:last-child td {
+  border-bottom: none;
 }
 
 @media (min-width: 640px) {

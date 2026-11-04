@@ -24,15 +24,9 @@ function Reportes() {
   }, [])
 
   useEffect(() => {
-    let vigente = true
     cuidadosPorMes(meses)
-      .then((datos) => {
-        if (vigente) setPorMes(datos)
-      })
+      .then(setPorMes)
       .catch((err) => setError(err.message))
-    return () => {
-      vigente = false
-    }
   }, [meses])
 
   if (error) return <p className="error">No se pudieron cargar los reportes: {error}</p>

@@ -166,10 +166,10 @@ GET {{base}}/plantas?limit=20&especieId={{especies.response.body.1.id}}
 ### detalle con la salud calculada
 GET {{base}}/plantas/{{rulo.response.body.datos.0.id}}
 
-### sus riegos
-GET {{base}}/plantas/{{rulo.response.body.datos.0.id}}/cuidados?tipo=riego
+### sus cuidados
+GET {{base}}/plantas/{{rulo.response.body.datos.0.id}}/cuidados
 
-### regarlo hoy (sin fecha toma la de hoy)
+### regarlo hoy
 # @name riego
 POST {{base}}/plantas/{{rulo.response.body.datos.0.id}}/cuidados
 Content-Type: application/json
@@ -181,9 +181,6 @@ Content-Type: application/json
 
 ### ahora deberia estar al dia
 GET {{base}}/plantas/{{rulo.response.body.datos.0.id}}
-
-### un cuidado puntual
-GET {{base}}/plantas/{{rulo.response.body.datos.0.id}}/cuidados/{{riego.response.body.id}}
 
 ### tipo que no existe, 422
 POST {{base}}/plantas/{{rulo.response.body.datos.0.id}}/cuidados
@@ -198,8 +195,7 @@ POST {{base}}/plantas/{{muertas.response.body.datos.0.id}}/cuidados
 Content-Type: application/json
 
 {
-  "tipo": "riego",
-  "fecha": "2026-10-01"
+  "tipo": "riego"
 }
 
 ### planta que no existe, 404

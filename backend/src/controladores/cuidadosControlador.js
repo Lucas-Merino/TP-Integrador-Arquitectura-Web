@@ -1,11 +1,7 @@
 import * as servicio from '../servicios/cuidadosServicio.js'
 
 export function listar(req, res) {
-  res.json(servicio.listar(req.params.id, req.query))
-}
-
-export function obtener(req, res) {
-  res.json(servicio.obtener(req.params.id, req.params.cuidadoId))
+  res.json(servicio.listar(req.params.id))
 }
 
 export function crear(req, res) {
