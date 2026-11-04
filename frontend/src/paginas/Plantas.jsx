@@ -38,25 +38,13 @@ function Plantas() {
 
   // cada vez que cambia un filtro o la pagina se vuelve a pedir el listado
   useEffect(() => {
-    // si llega una respuesta vieja despues de una nueva, se ignora
-    let vigente = true
-
     listarPlantas({ ...filtros, page: pagina, limit: POR_PAGINA })
       .then((res) => {
-        if (!vigente) return
         setResultado(res)
         setError(null)
       })
-      .catch((err) => {
-        if (vigente) setError(err.message)
-      })
-      .finally(() => {
-        if (vigente) setCargando(false)
-      })
-
-    return () => {
-      vigente = false
-    }
+      .catch((err) => setError(err.message))
+      .finally(() => setCargando(false))
   }, [filtros, pagina, version])
 
   // al filtrar se vuelve a la primera pagina, si no podes quedar en una que ya no existe
@@ -145,16 +133,19 @@ function Plantas() {
         )}
       </div>
 
+      {/* el formulario se abre como ventana encima del listado, asi la pagina no se mueve */}
       {enFormulario && (
-        <FormularioPlanta
-          // la key hace que el formulario arranque de cero al cambiar de planta
-          key={enFormulario === 'nueva' ? 'nueva' : enFormulario.id}
-          planta={enFormulario === 'nueva' ? null : enFormulario}
-          especies={especies}
-          zonas={zonas}
-          onGuardar={guardar}
-          onCancelar={() => setEnFormulario(null)}
-        />
+        <div className="fondo-modal" role="dialog" aria-modal="true">
+          <FormularioPlanta
+            // la key hace que el formulario arranque de cero al cambiar de planta
+            key={enFormulario === 'nueva' ? 'nueva' : enFormulario.id}
+            planta={enFormulario === 'nueva' ? null : enFormulario}
+            especies={especies}
+            zonas={zonas}
+            onGuardar={guardar}
+            onCancelar={() => setEnFormulario(null)}
+          />
+        </div>
       )}
 
       {mensaje && <p className="aviso" role="status">{mensaje}</p>}

@@ -2,8 +2,9 @@ import { useState } from 'react'
 
 const VACIO = { apodo: '', especieId: '', zonaId: '', fechaCompra: '' }
 
-// hoy en formato AAAA-MM-DD, para que no se pueda cargar una compra en el futuro
-const hoy = () => new Date().toISOString().slice(0, 10)
+// hoy en formato AAAA-MM-DD con la hora local (toISOString usa UTC y a la noche ya da mañana).
+// 'en-CA' es un formato de fecha que justo devuelve AAAA-MM-DD
+const hoy = () => new Date().toLocaleDateString('en-CA')
 
 // revisa lo mismo que el backend, pero antes de mandar nada.
 // No reemplaza la validacion del servidor: es solo para avisar rapido

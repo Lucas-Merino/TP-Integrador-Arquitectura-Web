@@ -1,13 +1,7 @@
 import { useEffect, useState } from 'react'
 import { obtenerPlanta, cambiarEstado } from '../api/plantas.js'
 import { listarCuidados, registrarCuidado, eliminarCuidado } from '../api/cuidados.js'
-
-const TIPOS = [
-  { tipo: 'riego', texto: '💧 Regar' },
-  { tipo: 'abono', texto: '🌱 Abonar' },
-  { tipo: 'poda', texto: '✂️ Podar' },
-  { tipo: 'trasplante', texto: '🪴 Trasplantar' },
-]
+import AccionesPlanta from './AccionesPlanta.jsx'
 
 const textoTipo = { riego: 'Riego', abono: 'Abono', poda: 'Poda', trasplante: 'Trasplante' }
 
@@ -27,7 +21,6 @@ const formatearFecha = (fecha) => fecha.split('-').reverse().join('/')
 function DetallePlanta({ id, especie, zona, onVolver }) {
   const [planta, setPlanta] = useState(null)
   const [cuidados, setCuidados] = useState([])
-  const [nota, setNota] = useState('')
   const [error, setError] = useState(null)
   const [ocupado, setOcupado] = useState(false)
   const [version, setVersion] = useState(0)
@@ -35,19 +28,12 @@ function DetallePlanta({ id, especie, zona, onVolver }) {
   // la planta y sus cuidados se piden juntos; despues de cada cambio se vuelven a pedir
   // porque la salud la calcula el servidor
   useEffect(() => {
-    let vigente = true
     Promise.all([obtenerPlanta(id), listarCuidados(id)])
       .then(([p, c]) => {
-        if (!vigente) return
         setPlanta(p)
         setCuidados(c)
       })
-      .catch((err) => {
-        if (vigente) setError(err.message)
-      })
-    return () => {
-      vigente = false
-    }
+      .catch((err) => setError(err.message))
   }, [id, version])
 
   // envuelve cada accion: bloquea los botones, muestra el error y recarga al final
@@ -65,13 +51,6 @@ function DetallePlanta({ id, especie, zona, onVolver }) {
     }
   }
 
-  function registrar(tipo) {
-    hacer(async () => {
-      await registrarCuidado(id, { tipo, nota: nota.trim() || undefined })
-      setNota('')
-    })
-  }
-
   if (!planta) {
     return (
       <section>
@@ -85,7 +64,6 @@ function DetallePlanta({ id, especie, zona, onVolver }) {
 
   // estado derivado: no se guarda en el estado de React, sale de la planta
   const terminada = FINALES.includes(planta.estado)
-  const otrosEstados = Object.keys(textoEstado).filter((e) => e !== planta.estado)
 
   return (
     <section className="detalle">
@@ -124,50 +102,12 @@ function DetallePlanta({ id, especie, zona, onVolver }) {
           Esta planta está {planta.estado}: ya no se le registran cuidados ni cambia de estado.
         </p>
       ) : (
-        <>
-          <fieldset className="detalle-bloque">
-            <legend>Registrar un cuidado de hoy</legend>
-            <label htmlFor="nota">Nota (opcional)</label>
-            <input
-              id="nota"
-              value={nota}
-              maxLength={120}
-              placeholder="Ej: le puse fertilizante líquido"
-              onChange={(e) => setNota(e.target.value)}
-            />
-            <div className="detalle-botones">
-              {TIPOS.map(({ tipo, texto }) => (
-                <button
-                  key={tipo}
-                  type="button"
-                  className="boton-principal"
-                  disabled={ocupado}
-                  onClick={() => registrar(tipo)}
-                >
-                  {texto}
-                </button>
-              ))}
-            </div>
-          </fieldset>
-
-          <fieldset className="detalle-bloque">
-            <legend>Cambiar estado</legend>
-            <div className="detalle-botones">
-              {otrosEstados.map((estado) => (
-                <button
-                  key={estado}
-                  type="button"
-                  className="boton-secundario"
-                  disabled={ocupado}
-                  onClick={() => hacer(() => cambiarEstado(id, estado))}
-                >
-                  {textoEstado[estado]}
-                </button>
-              ))}
-            </div>
-            <p className="ayuda">Si pasa a muerta o regalada, después no se puede volver atrás.</p>
-          </fieldset>
-        </>
+        <AccionesPlanta
+          estadoActual={planta.estado}
+          ocupado={ocupado}
+          onCuidado={(tipo, nota) => hacer(() => registrarCuidado(id, { tipo, nota: nota || undefined }))}
+          onEstado={(estado) => hacer(() => cambiarEstado(id, estado))}
+        />
       )}
 
       <h3>Historial de cuidados</h3>
