@@ -14,7 +14,7 @@ Todos los errores tienen la misma forma:
 
 | Status | Cuándo |
 |---|---|
-| 400 | El pedido está mal armado: JSON roto, el cuerpo no es un objeto, o un parámetro de query inválido (`page`, `limit`, `meses`). |
+| 400 | El pedido está mal armado: JSON roto o el parámetro `meses` inválido. |
 | 404 | El recurso o la ruta no existen. |
 | 409 | El pedido es válido pero choca con el estado actual (borrar algo en uso, cambiar una planta muerta o regalada). |
 | 422 | El JSON está bien formado pero algún campo no cumple las reglas (falta, tipo incorrecto, valor fuera de la lista, referencia a una especie o zona que no existe). |
@@ -22,17 +22,11 @@ Todos los errores tienen la misma forma:
 
 ## Paginación
 
-`GET /plantas` devuelve la lista paginada. Parámetros: `page` (desde 1, por defecto 1) y `limit` (por defecto 10). Tienen que ser enteros mayores a 0, si no da 400.
+`GET /plantas` devuelve la lista paginada. Parámetros: `page` (desde 1, por defecto 1) y `limit` (por defecto 10). Si no son enteros mayores a 0 se usan los valores por defecto.
 
 ```json
 { "datos": [ ... ], "pagina": 1, "limite": 10, "total": 13, "totalPaginas": 2 }
 ```
-
-## Salud
-
-`GET /api/v1/salud` → **200** `{ "ok": true }`. Sirve para ver que el servidor está levantado.
-
----
 
 ## Especies
 
@@ -103,7 +97,7 @@ El listado y el detalle agregan `salud` a cada planta, que se calcula en el mome
 
 | Verbo | Ruta | Descripción | Status |
 |---|---|---|---|
-| GET | `/plantas` | Lista paginada. Filtros opcionales: `zonaId`, `especieId`, `estado`, más `page` y `limit`. | 200, 400 |
+| GET | `/plantas` | Lista paginada. Filtros opcionales: `zonaId`, `especieId`, `estado`, más `page` y `limit`. | 200 |
 | GET | `/plantas/:id` | Una planta con su `salud`. | 200, 404 |
 | POST | `/plantas` | Crea una planta (estado `activa`). Devuelve `Location`. | 201, 400, 422 |
 | PUT | `/plantas/:id` | Reemplaza apodo, especie, zona y fecha. Conserva el estado. | 200, 400, 404, 422 |
@@ -115,15 +109,14 @@ El listado y el detalle agregan `salud` a cada planta, que se calcula en el mome
 Sub-recurso de una planta: `/plantas/:id/cuidados`. Si la planta no existe, cualquier pedido da 404.
 
 ```json
-{ "tipo": "riego", "fecha": "2026-10-20", "nota": "con agua de lluvia" }
+{ "tipo": "riego", "nota": "con agua de lluvia" }
 ```
 
-Reglas: `tipo` es `riego`, `abono`, `poda` o `trasplante`; `fecha` es opcional (si no viene se usa la de hoy) y no puede ser futura; `nota` es opcional.
+Reglas: `tipo` es `riego`, `abono`, `poda` o `trasplante`; `nota` es opcional. La fecha no se manda: el cuidado se registra con la de hoy.
 
 | Verbo | Ruta | Descripción | Status |
 |---|---|---|---|
-| GET | `/plantas/:id/cuidados` | Cuidados de la planta, del más nuevo al más viejo. Filtro opcional `?tipo=riego`. | 200, 404 |
-| GET | `/plantas/:id/cuidados/:cuidadoId` | Un cuidado. Si es de otra planta también da 404. | 200, 404 |
+| GET | `/plantas/:id/cuidados` | Cuidados de la planta, del más nuevo al más viejo. | 200, 404 |
 | POST | `/plantas/:id/cuidados` | Registra un cuidado. Devuelve `Location`. | 201, 400, 404, 409 si la planta está muerta o regalada, 422 |
 | DELETE | `/plantas/:id/cuidados/:cuidadoId` | Borra un cuidado (por si se cargó mal). | 204, 404 |
 
@@ -152,5 +145,4 @@ Ejemplo de una fila de `cuidados-por-mes`:
 
 ## Otros detalles
 
-- Las respuestas de más de 1 KB se comprimen con gzip si el cliente manda `Accept-Encoding: gzip`.
 - Una ruta que no existe (por ejemplo `POST /reportes/riegos-pendientes`) responde 404 con el mismo formato de error.
