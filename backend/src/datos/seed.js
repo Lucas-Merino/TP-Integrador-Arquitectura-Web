@@ -5,7 +5,7 @@ import { especies, zonas, plantas, cuidados, reiniciar } from './almacen.js'
 function haceDias(n) {
   const fecha = new Date()
   fecha.setDate(fecha.getDate() - n)
-  return fecha.toISOString().slice(0, 10)
+  return fecha.toLocaleDateString('en-CA')
 }
 
 function guardar(mapa, datos) {
