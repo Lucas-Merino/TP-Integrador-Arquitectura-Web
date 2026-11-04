@@ -18,7 +18,7 @@ function App() {
       </main>
 
       <footer className="pie">
-        <p>TPI Arquitectura Web · Lucas Merino · 2026</p>
+        <p>TPI Arquitectura Web - Lucas Merino - 2026</p>
       </footer>
     </>
   )
