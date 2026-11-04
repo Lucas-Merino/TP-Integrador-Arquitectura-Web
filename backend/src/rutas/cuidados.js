@@ -6,7 +6,6 @@ import { validarCuidado } from '../middlewares/validarCuidado.js'
 const router = Router({ mergeParams: true })
 
 router.get('/', controlador.listar)
-router.get('/:cuidadoId', controlador.obtener)
 router.post('/', validarCuidado, controlador.crear)
 router.delete('/:cuidadoId', controlador.eliminar)
 

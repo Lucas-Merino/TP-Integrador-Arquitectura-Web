@@ -8,11 +8,8 @@ function esEnteroPositivo(valor) {
 
 // revisa el body de POST y PUT antes de llegar al controlador
 export function validarEspecie(req, res, next) {
-  const datos = req.body
+  const datos = req.body ?? {}
 
-  if (!datos || typeof datos !== 'object' || Array.isArray(datos)) {
-    throw new ErrorHttp(400, 'El cuerpo del pedido tiene que ser un objeto JSON')
-  }
   if (typeof datos.nombreComun !== 'string' || datos.nombreComun.trim() === '') {
     throw new ErrorHttp(422, 'El campo nombreComun es obligatorio y tiene que ser texto')
   }

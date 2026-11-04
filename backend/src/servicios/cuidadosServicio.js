@@ -4,10 +4,9 @@ import { ErrorHttp } from '../middlewares/manejarErrores.js'
 import { obtener as obtenerPlanta } from './plantasServicio.js'
 
 // del mas nuevo al mas viejo
-export function listar(plantaId, query = {}) {
+export function listar(plantaId) {
   obtenerPlanta(plantaId)
-  let lista = [...cuidados.values()].filter((c) => c.plantaId === plantaId)
-  if (query.tipo) lista = lista.filter((c) => c.tipo === query.tipo)
+  const lista = [...cuidados.values()].filter((c) => c.plantaId === plantaId)
   return lista.sort((a, b) => b.fecha.localeCompare(a.fecha))
 }
 
@@ -32,7 +31,7 @@ export function crear(plantaId, datos) {
     id: randomUUID(),
     plantaId,
     tipo: datos.tipo,
-    fecha: datos.fecha ?? new Date().toISOString().slice(0, 10),
+    fecha: new Date().toLocaleDateString('en-CA'),
     nota: datos.nota?.trim() || null
   }
   cuidados.set(cuidado.id, cuidado)

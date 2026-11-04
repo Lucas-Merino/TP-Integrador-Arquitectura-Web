@@ -3,7 +3,7 @@ import { cuidados, especies } from '../datos/almacen.js'
 const UN_DIA = 24 * 60 * 60 * 1000
 
 function diasDesde(fecha) {
-  const hoy = new Date(new Date().toISOString().slice(0, 10))
+  const hoy = new Date(new Date().toLocaleDateString('en-CA'))
   return Math.floor((hoy - new Date(fecha)) / UN_DIA)
 }
 
